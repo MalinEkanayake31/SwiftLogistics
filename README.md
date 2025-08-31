@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SwiftLogistics - Middleware Architecture Solution
 
 ## 🚀 Project Overview
@@ -305,3 +306,7 @@ For technical support or questions:
 ---
 
 **SwiftLogistics** - Transforming logistics through innovative middleware architecture! 🚚📦✨
+=======
+# SwiftLogistics
+Microservices-based middleware for integrating CMS (SOAP/XML), ROS (REST/JSON), and WMS (TCP/IP) into SwiftTrack – a real-time logistics platform with event-driven processing, fault tolerance, and secure, scalable architecture.
+>>>>>>> 5cee795d269e006f443d5e5962a2536c07bab020
