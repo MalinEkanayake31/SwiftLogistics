@@ -7,7 +7,7 @@ const router = express.Router();
 // Import services
 const databaseService = require("../shared/database/connection");
 const mongoose = require("mongoose");
-const { clientSchema, driverSchema } = require("../../shared/models");
+const { clientSchema, driverSchema } = require("../shared/models");
 
 const Client = mongoose.model("Client", new mongoose.Schema(clientSchema));
 const Driver = mongoose.model("Driver", new mongoose.Schema(driverSchema));
@@ -24,6 +24,7 @@ const validateRegister = [
   body("email").isEmail().normalizeEmail(),
   body("password").isLength({ min: 6 }),
   body("role").isIn(["client", "driver", "admin"]),
+  body("address").notEmpty().isString(),
   body("phone").optional().isMobilePhone(),
   body("clientId").optional().isString(),
   body("driverId").optional().isString(),
@@ -47,13 +48,16 @@ router.post("/login", validateLogin, async (req, res) => {
     // Find user by email using Mongoose models
     let user = await Client.findOne({ email });
     let userType = "client";
+    console.error("DEBUG: Login - Client lookup result:", user);
 
     if (!user) {
       user = await Driver.findOne({ email });
       userType = "driver";
+      console.error("DEBUG: Login - Driver lookup result:", user);
     }
 
     if (!user) {
+      console.error("DEBUG: Login - No user found for email:", email);
       return res.status(401).json({
         error: "Invalid email or password",
         code: "INVALID_CREDENTIALS",
@@ -62,6 +66,7 @@ router.post("/login", validateLogin, async (req, res) => {
 
     // Check if user is active
     if (user.status !== "Active") {
+      console.error("DEBUG: Login - User not active. Status:", user.status);
       return res.status(401).json({
         error: "Account is not active",
         code: "ACCOUNT_INACTIVE",
@@ -71,7 +76,9 @@ router.post("/login", validateLogin, async (req, res) => {
 
     // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password || "");
+    console.error("DEBUG: Login - Password comparison result:", isValidPassword);
     if (!isValidPassword) {
+      console.error("DEBUG: Login - Password mismatch for email:", email);
       return res.status(401).json({
         error: "Invalid email or password",
         code: "INVALID_CREDENTIALS",
@@ -149,7 +156,7 @@ router.post("/register", validateRegister, async (req, res) => {
     const errors = validationResult(req);
     console.error("DEBUG: Validation errors:", errors.array());
     if (!errors.isEmpty()) {
-      console.error("DEBUG: Validation failed");
+      console.error("DEBUG: Registration validation failed", errors.array());
       return res.status(400).json({
         error: "Validation failed",
         code: "VALIDATION_ERROR",
@@ -157,12 +164,14 @@ router.post("/register", validateRegister, async (req, res) => {
       });
     }
 
-    const { name, email, password, role, phone, clientId, driverId } = req.body;
-    console.error("DEBUG: Request body:", req.body);
+  const { name, email, password, role, phone, clientId, driverId, address } = req.body;
+  console.error("DEBUG: Request body:", req.body);
+  console.error("DEBUG: Extracted address value:", address);
 
     // Check if user already exists using Mongoose models
     const existingUser = await Client.findOne({ email });
     if (existingUser) {
+      console.error("DEBUG: User with this email already exists (Client)");
       return res.status(409).json({
         error: "User with this email already exists",
         code: "USER_EXISTS",
@@ -171,6 +180,7 @@ router.post("/register", validateRegister, async (req, res) => {
 
     const existingDriver = await Driver.findOne({ email });
     if (existingDriver) {
+      console.error("DEBUG: User with this email already exists (Driver)");
       return res.status(409).json({
         error: "User with this email already exists",
         code: "USER_EXISTS",
@@ -185,16 +195,19 @@ router.post("/register", validateRegister, async (req, res) => {
     let userDoc;
 
     if (role === "client") {
-      userDoc = new Client({
-        clientId: clientId || `CL${Date.now()}`,
-        name,
-        email,
-        password: hashedPassword,
-        phone: phone || "",
-        status: "Active",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+        const clientObj = {
+          clientId: clientId || `CL${Date.now()}`,
+          name,
+          email,
+          password: hashedPassword,
+          phone: phone || "",
+          address: typeof address === 'string' ? address : (req.body.address || ""),
+          status: "Active",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        console.error("DEBUG: Client creation object:", clientObj);
+        userDoc = new Client(clientObj);
       await userDoc.save();
       userType = "client";
     } else if (role === "driver") {
@@ -239,10 +252,10 @@ router.post("/register", validateRegister, async (req, res) => {
     });
 
     // Store token in Redis
-    const redis = databaseService.redisConnection;
-    if (redis) {
-      await redis.setex(`session:${userDoc._id}`, 24 * 60 * 60, token);
-    }
+  // const redis = databaseService.redisConnection;
+  // if (redis) {
+  //     await redis.setex(`session:${userDoc._id}`, 24 * 60 * 60, token);
+  // }
 
     // Publish registration event
     try {

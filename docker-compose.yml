@@ -59,7 +59,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      MONGODB_URI: mongodb://admin:swiftlogistics123@mongodb:27017/swiftlogistics?authSource=admin
+      MONGODB_URI: "mongodb+srv://malinrotaract3220_db_user:oSDA998N8QB2Cptf@cluster0.iyn2are.mongodb.net/swiftlogistics?retryWrites=true&w=majority&appName=Cluster0"
       REDIS_URL: redis://redis:6379
       RABBITMQ_URL: amqp://admin:swiftlogistics123@rabbitmq:5672
       JWT_SECRET: swiftlogistics-super-secret-jwt-key-2025
@@ -82,7 +82,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      MONGODB_URI: mongodb://admin:swiftlogistics123@mongodb:27017/swiftlogistics?authSource=admin
+      MONGODB_URI: "mongodb+srv://malinrotaract3220_db_user:oSDA998N8QB2Cptf@cluster0.iyn2are.mongodb.net/swiftlogistics?retryWrites=true&w=majority&appName=Cluster0"
       REDIS_URL: redis://redis:6379
       RABBITMQ_URL: amqp://admin:swiftlogistics123@rabbitmq:5672
       JWT_SECRET: swiftlogistics-super-secret-jwt-key-2025
@@ -105,7 +105,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3002
-      MONGODB_URI: mongodb://admin:swiftlogistics123@mongodb:27017/swiftlogistics?authSource=admin
+      MONGODB_URI: "mongodb+srv://malinrotaract3220_db_user:oSDA998N8QB2Cptf@cluster0.iyn2are.mongodb.net/swiftlogistics?retryWrites=true&w=majority&appName=Cluster0"
       REDIS_URL: redis://redis:6379
       RABBITMQ_URL: amqp://admin:swiftlogistics123@rabbitmq:5672
       JWT_SECRET: swiftlogistics-super-secret-jwt-key-2025
@@ -128,7 +128,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3003
-      MONGODB_URI: mongodb://admin:swiftlogistics123@mongodb:27017/swiftlogistics?authSource=admin
+      MONGODB_URI: "mongodb+srv://malinrotaract3220_db_user:oSDA998N8QB2Cptf@cluster0.iyn2are.mongodb.net/swiftlogistics?retryWrites=true&w=majority&appName=Cluster0"
       REDIS_URL: redis://redis:6379
       RABBITMQ_URL: amqp://admin:swiftlogistics123@rabbitmq:5672
       JWT_SECRET: swiftlogistics-super-secret-jwt-key-2025
@@ -151,7 +151,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3004
-      MONGODB_URI: mongodb://admin:swiftlogistics123@mongodb:27017/swiftlogistics?authSource=admin
+      MONGODB_URI: "mongodb+srv://malinrotaract3220_db_user:oSDA998N8QB2Cptf@cluster0.iyn2are.mongodb.net/swiftlogistics?retryWrites=true&w=majority&appName=Cluster0"
       REDIS_URL: redis://redis:6379
       RABBITMQ_URL: amqp://admin:swiftlogistics123@rabbitmq:5672
       JWT_SECRET: swiftlogistics-super-secret-jwt-key-2025
@@ -174,7 +174,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3005
-      MONGODB_URI: mongodb://admin:swiftlogistics123@mongodb:27017/swiftlogistics?authSource=admin
+      MONGODB_URI: "mongodb+srv://malinrotaract3220_db_user:oSDA998N8QB2Cptf@cluster0.iyn2are.mongodb.net/swiftlogistics?retryWrites=true&w=majority&appName=Cluster0"
       REDIS_URL: redis://redis:6379
       RABBITMQ_URL: amqp://admin:swiftlogistics123@rabbitmq:5672
       JWT_SECRET: swiftlogistics-super-secret-jwt-key-2025
