@@ -7,8 +7,8 @@ const compression = require('compression');
 const morgan = require('morgan');
 require('dotenv').config();
 
-const databaseService = require('../../shared/database/connection');
-const rabbitMQService = require('../../shared/messaging/rabbitmq');
+const databaseService = require('./shared/database/connection');
+const rabbitMQService = require('./shared/messaging/rabbitmq');
 
 const app = express();
 const server = createServer(app);

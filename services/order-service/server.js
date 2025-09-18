@@ -9,8 +9,8 @@ const cron = require('node-cron');
 require('dotenv').config();
 
 // Import services
-const databaseService = require('../../shared/database/connection');
-const rabbitMQService = require('../../shared/messaging/rabbitmq');
+const databaseService = require('./shared/database/connection');
+const rabbitMQService = require('./shared/messaging/rabbitmq');
 
 // Import models
 const Order = require('./models/Order');
