@@ -1,7 +1,12 @@
 FROM node:18-alpine
 WORKDIR /app
-COPY package*.json ./
+# Copy package.json and package-lock.json for client-service
+COPY ./services/client-service/package*.json ./
 RUN npm install
-COPY . .
+# Copy all client-service files
+COPY ./services/client-service/. .
+# Copy shared directory from root
+
+COPY ./shared ./shared
 EXPOSE 3001
 CMD ["node", "server.js"]

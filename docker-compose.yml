@@ -73,8 +73,8 @@ services:
   # Client Management Service
   client-service:
     build:
-      context: ./services/client-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/client-service/Dockerfile
     container_name: swiftlogistics-client-service
     restart: unless-stopped
     ports:
@@ -96,8 +96,8 @@ services:
   # Order Management Service
   order-service:
     build:
-      context: ./services/order-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/order-service/Dockerfile
     container_name: swiftlogistics-order-service
     restart: unless-stopped
     ports:
@@ -119,8 +119,8 @@ services:
   # Route Optimization Service
   route-service:
     build:
-      context: ./services/route-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/route-service/Dockerfile
     container_name: swiftlogistics-route-service
     restart: unless-stopped
     ports:
@@ -142,8 +142,8 @@ services:
   # Warehouse Management Service
   warehouse-service:
     build:
-      context: ./services/warehouse-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/warehouse-service/Dockerfile
     container_name: swiftlogistics-warehouse-service
     restart: unless-stopped
     ports:
@@ -165,8 +165,8 @@ services:
   # Notification Service
   notification-service:
     build:
-      context: ./services/notification-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/notification-service/Dockerfile
     container_name: swiftlogistics-notification-service
     restart: unless-stopped
     ports:
