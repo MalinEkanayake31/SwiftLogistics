@@ -140,7 +140,29 @@ console.log(
     authMiddleware.verifyToken.constructor.name
 );
 
-// API routes
+
+// Public health endpoints for all services (before auth middleware)
+app.use("/api/clients/health", (req, res) => res.json({ status: "OK", service: "Client Service", timestamp: new Date().toISOString(), uptime: process.uptime() }));
+app.use("/api/orders/health", (req, res) => res.json({ status: "OK", service: "Order Service", timestamp: new Date().toISOString(), uptime: process.uptime() }));
+app.use("/api/routes/health", (req, res) => res.json({ status: "OK", service: "Route Service", timestamp: new Date().toISOString(), uptime: process.uptime() }));
+app.use("/api/warehouse/health", (req, res) => res.json({ status: "OK", service: "Warehouse Service", timestamp: new Date().toISOString(), uptime: process.uptime() }));
+app.use("/api/notifications/health", (req, res) => res.json({ status: "OK", service: "Notification Service", timestamp: new Date().toISOString(), uptime: process.uptime() }));
+
+// Public proxy for client registration and login (before auth middleware)
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const CLIENT_SERVICE_URL = process.env.CLIENT_SERVICE_URL || 'http://client-service:3001';
+app.use('/api/clients/register', createProxyMiddleware({
+  target: CLIENT_SERVICE_URL,
+  changeOrigin: true,
+  pathRewrite: { '^/api/clients': '/api/clients' },
+}));
+app.use('/api/clients/login', createProxyMiddleware({
+  target: CLIENT_SERVICE_URL,
+  changeOrigin: true,
+  pathRewrite: { '^/api/clients': '/api/clients' },
+}));
+
+// API routes (protected)
 console.error("DEBUG: Mounting /api/auth route");
 app.use("/api/auth", authRoutes);
 app.use(

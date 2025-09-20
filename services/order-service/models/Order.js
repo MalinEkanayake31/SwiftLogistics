@@ -1,21 +1,15 @@
-// Basic Order model template for SwiftLogistics order-service
-// You can expand this with your schema/ORM as needed
+const mongoose = require('mongoose');
 
-class Order {
-  constructor({ id, clientId, items, status, createdAt }) {
-    this.id = id;
-    this.clientId = clientId;
-    this.items = items;
-    this.status = status;
-    this.createdAt = createdAt || new Date();
-  }
+const orderSchema = new mongoose.Schema({
+  clientId: { type: String, required: true },
+  productName: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  deliveryAddress: { type: String, required: true },
+  priority: { type: String, default: 'Normal' },
+  description: { type: String },
+  status: { type: String, default: 'pending' },
+  createdAt: { type: Date, default: Date.now }
+});
 
-  // Example static method to create an order
-  static create(data) {
-    return new Order(data);
-  }
-
-  // Add more methods as needed
-}
-
+const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;

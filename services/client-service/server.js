@@ -19,6 +19,39 @@ const io = new Server(server, {
   }
 });
 
+// --- Simple in-memory user store for demo ---
+const users = [];
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
+
+// --- Public registration endpoint ---
+app.post('/api/clients/register', (req, res) => {
+  if (!req.body || typeof req.body !== 'object') {
+    return res.status(400).json({ error: 'Invalid or missing JSON body.' });
+  }
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Name, email, and password are required.' });
+  }
+  if (users.find(u => u.email === email)) {
+    return res.status(409).json({ error: 'Email already registered.' });
+  }
+  const user = { id: users.length + 1, name, email, password };
+  users.push(user);
+  res.status(201).json({ id: user.id, name: user.name, email: user.email });
+});
+
+// --- Public login endpoint ---
+app.post('/api/clients/login', (req, res) => {
+  const { email, password } = req.body;
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid email or password.' });
+  }
+  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+  res.json({ token });
+});
+
 // Middleware
 app.use(helmet());
 app.use(cors());

@@ -237,32 +237,27 @@ async function gracefulShutdown() {
 async function startServer() {
   try {
     console.log('🚀 Starting SwiftLogistics Order Management Service...');
-    
+    console.log('DEBUG: MONGODB_URI =', process.env.MONGODB_URI);
     // Connect to databases
     if (process.env.MONGODB_URI) {
       await databaseService.connectMongoDB(process.env.MONGODB_URI);
     }
-    
     if (process.env.REDIS_URL) {
       await databaseService.connectRedis(process.env.REDIS_URL);
     }
-    
     // Connect to RabbitMQ
     if (process.env.RABBITMQ_URL) {
       await rabbitMQService.connect(process.env.RABBITMQ_URL);
       await initializeConsumers();
     }
-    
     // Initialize scheduled tasks
     initializeScheduledTasks();
-    
     // Start server
     server.listen(PORT, () => {
       console.log(`✅ Order Management Service running on port ${PORT}`);
       console.log(`🌐 Health check: http://localhost:${PORT}/health`);
       console.log(`📡 WebSocket server ready`);
     });
-    
   } catch (error) {
     console.error('❌ Failed to start Order Management Service:', error);
     process.exit(1);
